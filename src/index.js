@@ -52,7 +52,7 @@ const buttonStyle = {
 
 
 function Square({ cellNumber, turn, setTurn, cellsClicked, setCellsClicked, winner, setWinner} ) {
-  
+
   // Creates an array with 9 elements, each containing an empty string
   // const [cellsClicked, setCellsClicked] = useState(Array(9).fill(""))
 
@@ -75,63 +75,25 @@ function Square({ cellNumber, turn, setTurn, cellsClicked, setCellsClicked, winn
             [2, 4, 6],
         ],
     }
-    // console.log(combinations.horizontal[0]);
 
     for(let combination in combinations){
       combinations[combination].forEach((pattern) => {
           if(
               tempCellsClicked[pattern[0]] === "" ||
-              tempCellsClicked[pattern[1]] === "" || 
+              tempCellsClicked[pattern[1]] === "" ||
               tempCellsClicked[pattern[2]] === "")
               {
                   // do nothing
               }
-          else if(tempCellsClicked[pattern[0]] === tempCellsClicked[pattern[1]] && 
-                  tempCellsClicked[pattern[1]] === tempCellsClicked[pattern[2]]) 
+          else if(tempCellsClicked[pattern[0]] === tempCellsClicked[pattern[1]] &&
+                  tempCellsClicked[pattern[1]] === tempCellsClicked[pattern[2]])
                   {
                       setWinner(tempCellsClicked[pattern[0]])
                   }
-          
+
       })
     }
 
-
-    // Win Horizontally
-    // if(tempCellsClicked[0] === tempCellsClicked[1] && tempCellsClicked[1] === tempCellsClicked[2]){
-    //   console.log("Winner is ", tempCellsClicked[0])
-    //   setWinner(tempCellsClicked[0]);
-    // }
-    // else if(tempCellsClicked[3] === tempCellsClicked[4] && tempCellsClicked[4] === tempCellsClicked[5]){
-    //   console.log("Winner is ", tempCellsClicked[3])
-    //   setWinner(tempCellsClicked[3]);
-    // }
-    // else if(tempCellsClicked[6] === tempCellsClicked[7] && tempCellsClicked[7] === tempCellsClicked[8]){
-    //   console.log("Winner is ", tempCellsClicked[6])
-    //   setWinner(tempCellsClicked[6]);
-    // }
-    // // Win Vertically
-    // else if(tempCellsClicked[0] === tempCellsClicked[3] && tempCellsClicked[3] === tempCellsClicked[6]){
-    //   console.log("Winner is ", tempCellsClicked[0])
-    //   setWinner(tempCellsClicked[0]);
-    // }
-    // else if(tempCellsClicked[1] === tempCellsClicked[4] && tempCellsClicked[4] === tempCellsClicked[7]){
-    //   console.log("Winner is ", tempCellsClicked[1])
-    //   setWinner(tempCellsClicked[1]);
-    // }
-    // else if(tempCellsClicked[2] === tempCellsClicked[5] && tempCellsClicked[5] === tempCellsClicked[8]){
-    //   console.log("Winner is ", tempCellsClicked[2])
-    //   setWinner(tempCellsClicked[2]);
-    // }
-    // // Win Diagonally
-    // else if(tempCellsClicked[0] === tempCellsClicked[4] && tempCellsClicked[4] === tempCellsClicked[8]){
-    //   console.log("Winner is ", tempCellsClicked[0])
-    //   setWinner(tempCellsClicked[0]);
-    // }
-    // else if(tempCellsClicked[2] === tempCellsClicked[4] && tempCellsClicked[4] === tempCellsClicked[6]){
-    //   console.log("Winner is ", tempCellsClicked[1])
-    //   setWinner(tempCellsClicked[2]);
-    // }
-    
   }
 
 
@@ -157,9 +119,7 @@ function Square({ cellNumber, turn, setTurn, cellsClicked, setCellsClicked, winn
     checkWin(tempCellsClicked)
 
     setCellsClicked(tempCellsClicked);
-    // console.log("cellsClicked:",cellsClicked)
-    // console.log("tempCellsClicked:",tempCellsClicked)
-  } 
+  }
 
 
   return (
@@ -169,7 +129,7 @@ function Square({ cellNumber, turn, setTurn, cellsClicked, setCellsClicked, winn
       onClick={() => handleClick(cellNumber)}
       className="square"
       style={squareStyle}>
-      
+
       {cellsClicked[cellNumber]}
     </div>
   );
@@ -190,7 +150,7 @@ function Board() {
     setWinner(null);
     setCellsClicked(Array(9).fill(""))
   }
-  
+
   return (
     <div style={containerStyle} className="gameBoard">
       <div id="statusArea" className="status" style={instructionsStyle}>Next player: <span>{turn}</span></div>
