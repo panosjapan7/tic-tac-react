@@ -1,17 +1,233 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+const rowStyle = {
+  display: 'flex'
+}
+
+const squareStyle = {
+  'width':'60px',
+  'height':'60px',
+  'backgroundColor': '#ddd',
+  'margin': '4px',
+  'display': 'flex',
+  'justifyContent': 'center',
+  'alignItems': 'center',
+  'fontSize': '20px',
+  'color': 'white'
+}
+
+const boardStyle = {
+  'backgroundColor': '#eee',
+  'width': '208px',
+  'alignItems': 'center',
+  'justifyContent': 'center',
+  'display': 'flex',
+  'flexDirection': 'column',
+  'border': '3px #eee solid'
+}
+
+const containerStyle = {
+  'display': 'flex',
+  'alignItems': 'center',
+  'flexDirection': 'column'
+}
+
+const instructionsStyle = {
+  'marginTop': '5px',
+  'marginBottom': '5px',
+  'fontWeight': 'bold',
+  'fontSize': '16px',
+}
+
+const buttonStyle = {
+  'marginTop': '15px',
+  'marginBottom': '16px',
+  'width': '80px',
+  'height': '40px',
+  'backgroundColor': '#8acaca',
+  'color': 'white',
+  'fontSize': '16px',
+}
+
+
+function Square({ cellNumber, turn, setTurn, cellsClicked, setCellsClicked, winner, setWinner} ) {
+  
+  // Creates an array with 9 elements, each containing an empty string
+  // const [cellsClicked, setCellsClicked] = useState(Array(9).fill(""))
+
+  const checkWin = (tempCellsClicked) => {
+    console.log("tempCellsClicked:")
+    // console.log(tempCellsClicked)
+    const combinations = {
+        horizontal: [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+        ],
+        vertical: [
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+        ],
+        diagonal: [
+            [0, 4, 8],
+            [2, 4, 6],
+        ],
+    }
+    // console.log(combinations.horizontal[0]);
+
+    for(let combination in combinations){
+      combinations[combination].forEach((pattern) => {
+          if(
+              tempCellsClicked[pattern[0]] === "" ||
+              tempCellsClicked[pattern[1]] === "" || 
+              tempCellsClicked[pattern[2]] === "")
+              {
+                  // do nothing
+              }
+          else if(tempCellsClicked[pattern[0]] === tempCellsClicked[pattern[1]] && 
+                  tempCellsClicked[pattern[1]] === tempCellsClicked[pattern[2]]) 
+                  {
+                      setWinner(tempCellsClicked[pattern[0]])
+                  }
+          
+      })
+    }
+
+
+    // Win Horizontally
+    // if(tempCellsClicked[0] === tempCellsClicked[1] && tempCellsClicked[1] === tempCellsClicked[2]){
+    //   console.log("Winner is ", tempCellsClicked[0])
+    //   setWinner(tempCellsClicked[0]);
+    // }
+    // else if(tempCellsClicked[3] === tempCellsClicked[4] && tempCellsClicked[4] === tempCellsClicked[5]){
+    //   console.log("Winner is ", tempCellsClicked[3])
+    //   setWinner(tempCellsClicked[3]);
+    // }
+    // else if(tempCellsClicked[6] === tempCellsClicked[7] && tempCellsClicked[7] === tempCellsClicked[8]){
+    //   console.log("Winner is ", tempCellsClicked[6])
+    //   setWinner(tempCellsClicked[6]);
+    // }
+    // // Win Vertically
+    // else if(tempCellsClicked[0] === tempCellsClicked[3] && tempCellsClicked[3] === tempCellsClicked[6]){
+    //   console.log("Winner is ", tempCellsClicked[0])
+    //   setWinner(tempCellsClicked[0]);
+    // }
+    // else if(tempCellsClicked[1] === tempCellsClicked[4] && tempCellsClicked[4] === tempCellsClicked[7]){
+    //   console.log("Winner is ", tempCellsClicked[1])
+    //   setWinner(tempCellsClicked[1]);
+    // }
+    // else if(tempCellsClicked[2] === tempCellsClicked[5] && tempCellsClicked[5] === tempCellsClicked[8]){
+    //   console.log("Winner is ", tempCellsClicked[2])
+    //   setWinner(tempCellsClicked[2]);
+    // }
+    // // Win Diagonally
+    // else if(tempCellsClicked[0] === tempCellsClicked[4] && tempCellsClicked[4] === tempCellsClicked[8]){
+    //   console.log("Winner is ", tempCellsClicked[0])
+    //   setWinner(tempCellsClicked[0]);
+    // }
+    // else if(tempCellsClicked[2] === tempCellsClicked[4] && tempCellsClicked[4] === tempCellsClicked[6]){
+    //   console.log("Winner is ", tempCellsClicked[1])
+    //   setWinner(tempCellsClicked[2]);
+    // }
+    
+  }
+
+
+  const handleClick = (cellNumber) => {
+
+    if(cellsClicked[cellNumber] !== ""){
+      alert("Square already clicked");
+      return
+    }
+
+    let tempCellsClicked = [...cellsClicked];
+
+    // When a cell is clicked, save its value to the current turn and save to array
+    if(turn === "X"){
+      tempCellsClicked[cellNumber] = "X"
+      setTurn("O")
+    }
+    else {
+      tempCellsClicked[cellNumber] = "O"
+      setTurn("X");
+    }
+
+    checkWin(tempCellsClicked)
+
+    setCellsClicked(tempCellsClicked);
+    // console.log("cellsClicked:",cellsClicked)
+    // console.log("tempCellsClicked:",tempCellsClicked)
+  } 
+
+
+  return (
+    <div
+      turn={turn}
+      winner={winner}
+      onClick={() => handleClick(cellNumber)}
+      className="square"
+      style={squareStyle}>
+      
+      {cellsClicked[cellNumber]}
+    </div>
+  );
+}
+
+
+
+function Board() {
+
+  const [turn, setTurn] = useState("X");
+
+  // Creates an array with 9 elements, each containing an empty string
+  const [cellsClicked, setCellsClicked] = useState(Array(9).fill(""))
+
+  const [winner, setWinner] = useState();
+
+  const resetGame = () => {
+    setWinner(null);
+    setCellsClicked(Array(9).fill(""))
+  }
+  
+  return (
+    <div style={containerStyle} className="gameBoard">
+      <div id="statusArea" className="status" style={instructionsStyle}>Next player: <span>{turn}</span></div>
+      <div id="winnerArea" className="winner" style={instructionsStyle}>Winner: <span>{!winner && "None"} {winner && (winner)}</span></div>
+      <button onClick={() => resetGame()} style={buttonStyle}>Reset</button>
+      <div style={boardStyle}>
+        <div className="board-row" style={rowStyle}>
+          <Square cellNumber={0} turn={turn} setTurn={setTurn} cellsClicked={cellsClicked} setCellsClicked={setCellsClicked} winner={winner} setWinner={setWinner}/>
+          <Square cellNumber={1} turn={turn} setTurn={setTurn} cellsClicked={cellsClicked} setCellsClicked={setCellsClicked} winner={winner} setWinner={setWinner}/>
+          <Square cellNumber={2} turn={turn} setTurn={setTurn} cellsClicked={cellsClicked} setCellsClicked={setCellsClicked} winner={winner} setWinner={setWinner}/>
+        </div>
+        <div className="board-row" style={rowStyle}>
+          <Square cellNumber={3} turn={turn} setTurn={setTurn} cellsClicked={cellsClicked} setCellsClicked={setCellsClicked} winner={winner} setWinner={setWinner}/>
+          <Square cellNumber={4} turn={turn} setTurn={setTurn} cellsClicked={cellsClicked} setCellsClicked={setCellsClicked} winner={winner} setWinner={setWinner}/>
+          <Square cellNumber={5} turn={turn} setTurn={setTurn} cellsClicked={cellsClicked} setCellsClicked={setCellsClicked} winner={winner} setWinner={setWinner}/>
+        </div>
+        <div className="board-row" style={rowStyle}>
+          <Square cellNumber={6} turn={turn} setTurn={setTurn} cellsClicked={cellsClicked} setCellsClicked={setCellsClicked} winner={winner} setWinner={setWinner}/>
+          <Square cellNumber={7} turn={turn} setTurn={setTurn} cellsClicked={cellsClicked} setCellsClicked={setCellsClicked} winner={winner} setWinner={setWinner}/>
+          <Square cellNumber={8} turn={turn} setTurn={setTurn} cellsClicked={cellsClicked} setCellsClicked={setCellsClicked} winner={winner} setWinner={setWinner}/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Game() {
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(
+  <Game />,
+  document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
